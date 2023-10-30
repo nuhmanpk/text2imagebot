@@ -3,12 +3,16 @@
 [![GitHub issues](https://img.shields.io/github/issues/nuhmanpk/text2imagebot)](https://github.com/nuhmanpk/text2imagebot/issues) 
 [![GitHub stars](https://img.shields.io/github/stars/nuhmanpk/text2imagebot)](https://github.com/nuhmanpk/text2imagebot/stargazers) 
 [![GitHub license](https://img.shields.io/github/license/nuhmanpk/text2imagebot)](https://github.com/nuhmanpk/text2imagebot/blob/main/LICENSE)
+
+## Demo
+
 <div>
-  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/text2image.gif" alt="Image" width="200"/>
-  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_22-44-24.jpg" alt="gif-demo" width="200"/>
-  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_23-15-22.jpg" alt="Image" width="200"/>
-  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_23-15-26.jpg" alt="Image" width="200"/>
-  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_23-15-24.jpg" alt="Image" width="200"/>
+  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/text2image.gif" alt="Image" width="300"/>
+  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_22-44-24.jpg" alt="gif-demo" width="267"/>
+  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_23-15-22.jpg" alt="Image" width="267"/>
+  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_23-15-26.jpg" alt="Image" width="267"/>
+  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_23-15-25.jpg" alt="Image" width="267"/>
+  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_23-15-24.jpg" alt="Image" width="267"/>
 </div>
 
 [View more demos](https://github.com/nuhmanpk/text2imagebot/tree/main/assets) • [Contribute to the project](https://github.com/nuhmanpk/text2imagebot/fork) 
@@ -37,5 +41,16 @@ To run the code locally, follow the instructions below:
 2. Ensure you have the required dependencies installed as specified in the `requirements.txt` file.
 3. Open the `text2imagebot.ipynb` notebook in your preferred environment (such as Google Colab or Jupyter Notebook).
 4. Follow the instructions in the notebook to execute the code and interact with the text2imagebot.
+
+
+## TODO:
+
+  - [x] Run on Colab
+  - [ ] Add Multiple Model from Huggingface
+  - [ ] Give user options to customize the model with seed, steps etc
+  - [ ] Add a perment Deployment Option
+  - [ ] Provide a Demo Bot For Testing
+  - [ ] Add Upscaler
+  - [ ] More user friendly UI
 
 Feel free to contribute to the project by submitting bug reports, feature requests, or pull requests. Your contributions are highly appreciated!
