@@ -1,0 +1,8 @@
+pyrogram
+tgcrypto
+huggingface
+ diffusers 
+ transformers 
+ accelerate
+ torch
+ python-dotenv
