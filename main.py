@@ -78,7 +78,8 @@ async def generate(bot, update:Message):
         )
         
 async def generate_image(prompt):
-    model_id = "prompthero/openjourney"
+    # TODO: add multi model options
+    model_id = "prompthero/openjourney" # change model name here , choose any model from huggingface
     pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
     pipe = pipe.to("cuda")
     steps=200
