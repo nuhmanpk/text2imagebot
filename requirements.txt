@@ -1,8 +1,8 @@
 pyrogram
 tgcrypto
 huggingface
- diffusers 
- transformers 
- accelerate
- torch
- python-dotenv
+diffusers 
+transformers 
+accelerate
+torch
+python-dotenv
