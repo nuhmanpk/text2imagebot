@@ -1,6 +1,8 @@
 # text2imagebot
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nuhmanpk/text2imagebot/blob/main/text2imagebot.ipynb)
-
+[![GitHub issues](https://img.shields.io/github/issues/nuhmanpk/text2imagebot)](https://github.com/nuhmanpk/text2imagebot/issues) 
+[![GitHub stars](https://img.shields.io/github/stars/nuhmanpk/text2imagebot)](https://github.com/nuhmanpk/text2imagebot/stargazers) 
+[![GitHub license](https://img.shields.io/github/license/nuhmanpk/text2imagebot)](https://github.com/nuhmanpk/text2imagebot/blob/main/LICENSE)
 <div>
   <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/text2image.gif" alt="Image" width="200"/>
   <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_22-44-24.jpg" alt="gif-demo" width="200"/>
