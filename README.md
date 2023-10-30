@@ -2,8 +2,8 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nuhmanpk/text2imagebot/blob/main/text2imagebot.ipynb)
 
 <div>
-  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_22-44-24.jpg" alt="gif-demo" width="200"/>
-  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/text2image.gif" alt="Image 2" width="200"/>
+  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_22-44-24.jpg" alt="gif-demo" width="266"/>
+  <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/text2image.gif" alt="Image 2" width="300"/>
 </div>
 
 Text2ImageBot is a Telegram bot that generates images from text inputs using advanced text-to-image generation techniques. This bot utilizes state-of-the-art deep learning models to convert textual descriptions into visually appealing images, providing users with a seamless experience for creating compelling visual content.
