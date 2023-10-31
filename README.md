@@ -15,7 +15,7 @@
   <img src="https://github.com/nuhmanpk/text2imagebot/blob/main/assests/photo_2023-10-30_23-15-24.jpg" alt="Image" width="267"/>
 </div>
 
-[View more demos](https://github.com/nuhmanpk/text2imagebot/tree/main/assets) • [Contribute to the project](https://github.com/nuhmanpk/text2imagebot/fork) 
+[View more demos](https://github.com/nuhmanpk/text2imagebot/tree/17e23f59cff76acc8d8321512fb4b906a0d14fd8/assests) • [Contribute to the project](https://github.com/nuhmanpk/text2imagebot/fork) 
 
 Text2ImageBot is a Telegram bot that generates images from text inputs using advanced text-to-image generation techniques. This bot utilizes state-of-the-art deep learning models to convert textual descriptions into visually appealing images, providing users with a seamless experience for creating compelling visual content.
 
