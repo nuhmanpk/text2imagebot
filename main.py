@@ -176,7 +176,7 @@ async def load_model(model):
     global pipe
     try:
         if not pipe:
-            pipe = StableDiffusionPipeline.from_pretrained(model, torch_dtype=torch.float16, cache_dir='./cache')
+            pipe = StableDiffusionPipeline.from_pretrained(model, torch_dtype=torch.float16)
             pipe = pipe.to("cuda")
         return True
     except Exception as e:
