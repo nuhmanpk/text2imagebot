@@ -47,3 +47,16 @@ ABOUT = """
 ● **LANGUAGE :** `Python 3.10` 
 ● **SOURCE :** [BugHunterBots](https://github.com/nuhmanpk) 
 """
+
+SETTINGS = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton("Choose Model", callback_data="choose_model"),
+                InlineKeyboardButton("Change Steps", callback_data="change_steps")
+            ],
+            [
+                InlineKeyboardButton("Change Seed", callback_data="change_seed"),
+                InlineKeyboardButton("Save Settings", callback_data="save_settings")
+            ]
+        ]
+)

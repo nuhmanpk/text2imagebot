@@ -4,7 +4,7 @@ import io
 from dotenv import load_dotenv
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from utils import ABOUT, CLOSE_BUTTON, HELP, START_BUTTON, START_STRING, GITHUB_BUTTON
+from utils import ABOUT, CLOSE_BUTTON, HELP, START_BUTTON, START_STRING, GITHUB_BUTTON, SETTINGS
 from models import MODELS
 import random
 from diffusers import StableDiffusionPipeline
@@ -79,7 +79,8 @@ async def generate(bot, update: Message):
             if not model_loaded:
                 await update.reply_text("Failed to load the model.")
                 return
-
+            else:
+                await text.edit('Generating Image...')
             image = await generate_image(prompt, settings.get("steps"))
             await text.edit('Uploading Image ....')
             await update.reply_photo(image, reply_markup=GITHUB_BUTTON)
@@ -94,8 +95,9 @@ async def generate(bot, update: Message):
 async def load_model(model):
     global pipe
     try:
-        pipe = StableDiffusionPipeline.from_pretrained(model, torch_dtype=torch.float16)
-        pipe = pipe.to("cuda")
+        if not pipe:
+            pipe = StableDiffusionPipeline.from_pretrained(model, torch_dtype=torch.float16, cache_dir='./cache')
+            pipe = pipe.to("cuda")
         return True
     except Exception as e:
         print(e)
@@ -110,5 +112,28 @@ async def generate_image(prompt, steps):
     image.save(image_stream, format='PNG')
     image_stream.seek(0)
     return image_stream
+
+@app.on_message(filters.command(["settings"]) & filters.private)
+async def settings(bot, update: Message):
+    chat_id = update.chat.id
+    settings_file_path = f'{chat_id}-settings.json'
+    if not os.path.exists(settings_file_path):
+        with open(settings_file_path, 'w') as f:
+            json.dump(DEFAULT_SETTINGS, f, indent=4)
+            text = "Settings file created. Please use the command again to access the settings."
+    else:
+        with open(settings_file_path, 'r') as f:
+            settings = json.load(f)
+            model = settings.get('model')
+            steps = settings.get('steps')
+            text = f"Current Settings:\nModel: {model}\nSteps: {steps}"
+
+
+
+    await update.reply_text(
+        text=text,
+        reply_markup=SETTINGS,
+        quote=True
+    )
 
 app.run(print('Bot Running....'))
