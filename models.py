@@ -15,4 +15,5 @@ MODELS = ['prompthero/openjourney',
           'Yntec/Dreamshaper8',
           'Yntec/photoMovieRealistic',
           'Yntec/edgeOfRealism',
+          'segmind/SSD-1B',
           ]

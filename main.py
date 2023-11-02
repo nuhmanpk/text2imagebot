@@ -175,13 +175,13 @@ async def generate(bot, update: Message):
 async def load_model(model):
     global pipe
     try:
-        if not pipe:
-            pipe = StableDiffusionPipeline.from_pretrained(model, torch_dtype=torch.float16)
-            pipe = pipe.to("cuda")
+        pipe = StableDiffusionPipeline.from_pretrained(model, torch_dtype=torch.float16)
+        pipe = pipe.to("cuda")
         return True
     except Exception as e:
         print(e)
         return False
+
 
 async def generate_image(prompt, steps, seed):
     global pipe
