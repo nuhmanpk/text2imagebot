@@ -4,7 +4,7 @@ import io
 from dotenv import load_dotenv
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from utils import ABOUT, CLOSE_BUTTON, HELP, START_BUTTON, START_STRING, GITHUB_BUTTON, SETTINGS
+from utils import ABOUT, CLOSE_BUTTON, HELP, START_BUTTON, START_STRING, GITHUB_BUTTON, SETTINGS, MODELS_BUTTON, STEPS_BUTTON
 from models import MODELS
 import random
 from diffusers import StableDiffusionPipeline
@@ -27,8 +27,16 @@ DEFAULT_SETTINGS = {
 
 app = Client("text2image", bot_token=bot_token, api_id=int(api_id), api_hash=api_hash)
 
+pipe = None
+
 @app.on_callback_query()
 async def cb_data(bot, update):
+    chat_id = update.message.chat.id
+    settings_file_path = f'{chat_id}-settings.json'
+    if not os.path.exists(settings_file_path):
+        with open(settings_file_path, 'w') as f:
+            json.dump(DEFAULT_SETTINGS, f, indent=4)
+            
     if update.data == "cbhelp":
         await update.message.edit_text(
             text=HELP,
@@ -39,6 +47,74 @@ async def cb_data(bot, update):
         await update.message.edit_text(
             text=ABOUT,
             reply_markup=CLOSE_BUTTON,
+            disable_web_page_preview=True
+        )
+    elif update.data == "cbsettings":
+        with open(settings_file_path, 'r') as f:
+            settings = json.load(f)
+        await update.message.edit_text(
+            text=f'Current Settings\n{settings}',
+            reply_markup=SETTINGS,
+            disable_web_page_preview=True
+        )
+    elif update.data == "choose_model":
+        with open(settings_file_path, 'r') as f:
+            settings = json.load(f)
+        await update.message.edit_text(
+            text=f'Current Settings\n{settings}',
+            reply_markup=MODELS_BUTTON,
+            disable_web_page_preview=True
+        )
+    elif update.data.startswith("select_model_"):
+        index = int(update.data.split("_")[2])
+        selected_model = MODELS[index]
+        with open(settings_file_path, 'r') as f:
+            settings = json.load(f)
+        settings['model'] = selected_model
+        with open(settings_file_path, 'w') as f:
+            json.dump(settings, f, indent=4)
+        await update.message.edit_text(
+            text=f"Selected model: {selected_model}",
+            reply_markup=SETTINGS,
+            disable_web_page_preview=True
+        )
+    elif update.data == "change_steps":
+        with open(settings_file_path, 'r') as f:
+            settings = json.load(f)
+        await update.message.edit_text(
+                text=f"Steps: {settings['steps']}",
+                reply_markup=STEPS_BUTTON,
+                disable_web_page_preview=True
+            )
+    elif update.data.startswith("+steps"):
+        with open(settings_file_path, 'r') as f:
+            settings = json.load(f)
+            current_steps = settings.get('steps')
+        with open(settings_file_path, 'r') as f:
+            settings = json.load(f)
+            settings['steps'] = current_steps+50
+        with open(settings_file_path, 'w') as f:
+            json.dump(settings, f, indent=4)
+        await update.message.edit_text(
+            text=f"Steps: {settings['steps']}",
+            reply_markup=STEPS_BUTTON,
+            disable_web_page_preview=True
+        )
+    elif update.data.startswith("-steps"):
+        with open(settings_file_path, 'r') as f:
+            settings = json.load(f)
+            current_steps = settings.get('steps')
+        with open(settings_file_path, 'r') as f:
+            settings = json.load(f)
+            try:
+                settings['steps'] = current_steps - 50 if current_steps > 50 else 50
+            except:
+                pass
+        with open(settings_file_path, 'w') as f:
+            json.dump(settings, f, indent=4)
+        await update.message.edit_text(
+            text=f"Steps: {settings['steps']}",
+            reply_markup=STEPS_BUTTON,
             disable_web_page_preview=True
         )
     else:
@@ -69,6 +145,10 @@ async def start(bot, update: Message):
 async def generate(bot, update: Message):
     if update.reply_to_message:
         chat_id = update.chat.id
+        settings_file_path = f'{chat_id}-settings.json'
+        if not os.path.exists(settings_file_path):
+            with open(settings_file_path, 'w') as f:
+                json.dump(DEFAULT_SETTINGS, f, indent=4)
         text = await update.reply_text("Loading settings...", quote=True)
         prompt = update.reply_to_message.text
         with open(f'{chat_id}-settings.json') as f:
@@ -81,7 +161,7 @@ async def generate(bot, update: Message):
                 return
             else:
                 await text.edit('Generating Image...')
-            image = await generate_image(prompt, settings.get("steps"))
+            image = await generate_image(prompt, settings.get("steps"),settings.get('seed'))
             await text.edit('Uploading Image ....')
             await update.reply_photo(image, reply_markup=GITHUB_BUTTON)
             await text.delete()
@@ -103,9 +183,13 @@ async def load_model(model):
         print(e)
         return False
 
-async def generate_image(prompt, steps):
+async def generate_image(prompt, steps, seed):
     global pipe
     steps = steps
+    if seed == -1:
+        torch.manual_seed(torch.seed())
+    else:
+        torch.manual_seed(seed)
     pipe = pipe.to("cuda")
     image = pipe(prompt, num_inference_steps=steps).images[0]
     image_stream = io.BytesIO()

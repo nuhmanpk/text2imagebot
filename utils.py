@@ -1,5 +1,5 @@
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
-
+from models import MODELS
 
 CHANNEL_BUTTON = InlineKeyboardMarkup(
     [[
@@ -17,7 +17,10 @@ START_BUTTON = InlineKeyboardMarkup(
     [[
         InlineKeyboardButton('ABOUT', callback_data='cbabout'),
         InlineKeyboardButton('HELP', callback_data='cbhelp')
-    ],
+    ],[
+        InlineKeyboardButton('SETTINGS', callback_data='cbsettings')
+    ]
+     ,
         [
         InlineKeyboardButton(
             '↗ Join Here ↗', url='https://t.me/BughunterBots'),
@@ -47,6 +50,10 @@ ABOUT = """
 ● **LANGUAGE :** `Python 3.10` 
 ● **SOURCE :** [BugHunterBots](https://github.com/nuhmanpk) 
 """
+BACK = [
+        InlineKeyboardButton('BACK', callback_data="back")
+    ]
+
 
 SETTINGS = InlineKeyboardMarkup(
         [
@@ -58,5 +65,21 @@ SETTINGS = InlineKeyboardMarkup(
                 InlineKeyboardButton("Change Seed", callback_data="change_seed"),
                 InlineKeyboardButton("Save Settings", callback_data="save_settings")
             ]
+        ]
+)
+
+MODELS_BUTTON = InlineKeyboardMarkup(
+    [
+        [InlineKeyboardButton(model, callback_data=f"select_model_{index}")] for index, model in enumerate(MODELS)
+    ]
+)
+
+STEPS_BUTTON = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton("-", callback_data="-steps"),
+                InlineKeyboardButton("+", callback_data="+steps")
+            ],[
+                InlineKeyboardButton('Back', callback_data='cbclose')]
         ]
 )

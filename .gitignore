@@ -6,7 +6,7 @@ __pycache__/
 .venv
 *.session
 *.session-journal
-
+*-settings.json
 # C extensions
 *.so
 
