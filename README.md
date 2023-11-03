@@ -46,11 +46,12 @@ To run the code locally, follow the instructions below:
 ## TODO:
 
   - [x] Run on Colab
-  - [ ] Add Multiple Model from Huggingface
-  - [ ] Give user options to customize the model with seed, steps etc
+  - [x] Add Multiple Model from Huggingface
+  - [x] Give user options to customize the model with seed, steps etc
   - [ ] Add a perment Deployment Option
   - [ ] Provide a Demo Bot For Testing
   - [ ] Add Upscaler
-  - [ ] More user friendly UI
+  - [x] More user friendly UI
+  - [ ] Add showcase channel 
 
 Feel free to contribute to the project by submitting bug reports, feature requests, or pull requests. Your contributions are highly appreciated!
