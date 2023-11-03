@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 from pyrogram import Client, filters
 from urllib.parse import quote
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from utils import ABOUT, CLOSE_BUTTON, HELP, START_BUTTON, START_STRING, GITHUB_BUTTON, SETTINGS, MODELS_BUTTON, STEPS_BUTTON, GITHUB_LINK, IMAGE_COUNT_BUTTON
+from utils import START_BUTTON, START_STRING, GITHUB_BUTTON, SETTINGS, GITHUB_LINK
+from callbacks import help_callback,about_callback,settings_callback,choose_model_callback,selected_model_callback,change_steps_callback,step_incre_callback,step_decre_callback,change_image_count_callback,image_incre_callback,image_decre_callback,back2settings_callback,start_callback
 from models import MODELS
 from diffusers import StableDiffusionPipeline
 import torch
@@ -38,153 +39,42 @@ pipe = None
 async def cb_data(bot, update):
     chat_id = update.message.chat.id
     settings_file_path = f'{chat_id}-settings.json'
+    
     if not os.path.exists(settings_file_path):
         with open(settings_file_path, 'w') as f:
             json.dump(DEFAULT_SETTINGS, f, indent=4)
+    
+    with open(settings_file_path, 'r') as f:
+        settings = json.load(f)
 
     if update.data == "cbhelp":
-        await update.message.edit_text(
-            text=HELP,
-            reply_markup=CLOSE_BUTTON,
-            disable_web_page_preview=True
-        )
+        await help_callback(update)
     elif update.data == "cbabout":
-        await update.message.edit_text(
-            text=ABOUT,
-            reply_markup=CLOSE_BUTTON,
-            disable_web_page_preview=True
-        )
+        await about_callback(update)
     elif update.data == "cbsettings":
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-        await update.message.edit_text(
-            text=f"Current Settings:\n🤖 Model: {settings['model']}\n🚶‍♂️ Steps: {settings['steps']}\n🌱 Seed: {settings['seed']} \n🖼️ Image Count: {settings['image_count']}",
-            reply_markup=SETTINGS,
-            disable_web_page_preview=True
-        )
+        await settings_callback(update,settings)
     elif update.data == "choose_model":
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-        await update.message.edit_text(
-            text=f"Current Settings:\n🤖 Model: {settings['model']}\n🚶‍♂️ Steps: {settings['steps']}\n🌱 Seed: {settings['seed']} \n🖼️ Image Count: {settings['image_count']}",
-            reply_markup=MODELS_BUTTON,
-            disable_web_page_preview=True
-        )
+        await choose_model_callback(update, settings)
     elif update.data.startswith("select_model_"):
         index = int(update.data.split("_")[2])
         selected_model = MODELS[index]
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-        settings['model'] = selected_model
-        with open(settings_file_path, 'w') as f:
-            json.dump(settings, f, indent=4)
-        await update.message.edit_text(
-            text=f"Selected model: {selected_model}",
-            reply_markup=SETTINGS,
-            disable_web_page_preview=True
-        )
+        await selected_model_callback(update,selected_model,settings,settings_file_path)
     elif update.data == "change_steps":
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-        await update.message.edit_text(
-            text=f"Steps: {settings['steps']}",
-            reply_markup=STEPS_BUTTON,
-            disable_web_page_preview=True
-        )
+        await change_steps_callback(update,settings)
     elif update.data.startswith("+steps"):
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-            current_steps = settings.get('steps')
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-            if current_steps < 10:
-                settings['steps'] = current_steps + 1
-            elif current_steps < 50:
-                settings['steps'] = current_steps + 10
-            else:
-                settings['steps'] = current_steps + 50
-        with open(settings_file_path, 'w') as f:
-            json.dump(settings, f, indent=4)
-        await update.message.edit_text(
-            text=f"Steps: {settings['steps']}",
-            reply_markup=STEPS_BUTTON,
-            disable_web_page_preview=True
-        )
-    
+        await step_incre_callback(update,settings,settings_file_path,)
     elif update.data == "change_image_count":
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-        await update.message.edit_text(
-            text=f"The num of Images that model Produce per prompt\nImages: {settings['image_count']}",
-            reply_markup=IMAGE_COUNT_BUTTON,
-            disable_web_page_preview=True
-        )       
+        await change_image_count_callback(update,settings)    
     elif update.data.startswith("+image"):
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-            current_image_count = settings.get('image_count')
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-            settings['image_count'] = current_image_count +  1
-        with open(settings_file_path, 'w') as f:
-            json.dump(settings, f, indent=4)
-        await update.message.edit_text(
-            text=f"Images: {settings['image_count']}",
-            reply_markup=IMAGE_COUNT_BUTTON,
-            disable_web_page_preview=True
-        )   
-
+        await image_incre_callback(update,settings,settings_file_path)
     elif update.data.startswith("-image"):
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-            current_image_count = settings.get('image_count')
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-            try:
-                settings['image_count'] = current_image_count - 1 if current_image_count > 1 else 1
-            except:
-                pass
-        with open(settings_file_path, 'w') as f:
-            json.dump(settings, f, indent=4)
-        await update.message.edit_text(
-            text=f"Images: {settings['image_count']}",
-            reply_markup=IMAGE_COUNT_BUTTON,
-            disable_web_page_preview=True
-        )
-
+        await image_decre_callback(update,settings,settings_file_path)
     elif update.data.startswith("-steps"):
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-            current_steps = settings.get('steps')
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-            if current_steps > 50:
-                settings['steps'] = current_steps - 50
-            elif current_steps > 10:
-                settings['steps'] = current_steps - 10
-            elif current_steps > 1:
-                settings['steps'] = current_steps - 1
-        with open(settings_file_path, 'w') as f:
-            json.dump(settings, f, indent=4)
-        await update.message.edit_text(
-            text=f"Steps: {settings['steps']}",
-            reply_markup=STEPS_BUTTON,
-            disable_web_page_preview=True
-        )
+        await step_decre_callback(update,settings,settings_file_path)
     elif update.data.startswith("cb_back_settings"):
-        with open(settings_file_path, 'r') as f:
-            settings = json.load(f)
-        await update.message.edit_text(
-            text=f"Current Settings:\n🤖 Model: {settings['model']}\n🚶‍♂️ Steps: {settings['steps']}\n🌱 Seed: {settings['seed']} \n🖼️ Image Count: {settings['image_count']}",
-            reply_markup=SETTINGS,
-            disable_web_page_preview=True
-        )
+        await back2settings_callback(update,settings)
     else:
-        await update.message.edit_text(
-            text=START_STRING.format(update.from_user.mention),
-            disable_web_page_preview=True,
-            reply_markup=START_BUTTON
-        )
+        await start_callback(update)
 
 
 @app.on_message(filters.command(["start"]) & filters.private)
