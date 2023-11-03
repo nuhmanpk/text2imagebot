@@ -272,7 +272,7 @@ async def generate_image(prompt, steps, seed, count):
     else:
         torch.manual_seed(seed)
     pipe = pipe.to("cuda")
-    images = pipe(prompt, num_inference_steps=steps).images[count]
+    images = pipe(prompt, num_inference_steps=steps,num_images_per_prompt=count).images
     image_streams=[]
     for image in images:
         image_stream = io.BytesIO()
