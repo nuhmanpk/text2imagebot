@@ -226,7 +226,7 @@ async def generate(bot, update: Message):
             else:
                 await text.edit('Generating Image...')
             try:
-                images = await generate_image(prompt, settings.get("steps"), settings.get('seed'),settings.get('image_count'))
+                images = await generate_image(update, prompt, settings.get("steps"), settings.get('seed'),settings.get('image_count'))
                 await text.edit(f'Uploading {settings.get("image_count")} Image ....')
                 for image in images:
                     await update.reply_photo(image, reply_markup=GITHUB_BUTTON)
@@ -261,10 +261,10 @@ async def load_model(model, update):
         issue_markup = InlineKeyboardMarkup(
             [[InlineKeyboardButton("Create Issue", url=error_link)]])
         await update.reply_text(text, disable_web_page_preview=True, quote=True, reply_markup=issue_markup)
-        return False
+        return False    
 
 
-async def generate_image(prompt, steps, seed, count):
+async def generate_image(update, prompt, steps, seed, count):
     global pipe
     steps = steps
     if seed == -1:
@@ -272,7 +272,10 @@ async def generate_image(prompt, steps, seed, count):
     else:
         torch.manual_seed(seed)
     pipe = pipe.to("cuda")
-    images = pipe(prompt, num_inference_steps=steps,num_images_per_prompt=count).images
+    async def custom_callback(step, timestep, latents):
+        text = f'{step} {timestep} {latents}'
+        txt = await update.reply_text(text, disable_web_page_preview=True, quote=True,)
+    images = pipe(prompt, num_inference_steps=steps,num_images_per_prompt=count,callback=custom_callback,callback_steps=5).images
     image_streams=[]
     for image in images:
         image_stream = io.BytesIO()
