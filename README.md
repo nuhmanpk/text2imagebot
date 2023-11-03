@@ -52,6 +52,7 @@ To run the code locally, follow the instructions below:
   - [ ] Provide a Demo Bot For Testing
   - [ ] Add Upscaler
   - [x] More user friendly UI
-  - [ ] Add showcase channel 
+  - [ ] Add showcase channel
+  - [ ] Add Multi image generation from same prompt 
 
 Feel free to contribute to the project by submitting bug reports, feature requests, or pull requests. Your contributions are highly appreciated!
