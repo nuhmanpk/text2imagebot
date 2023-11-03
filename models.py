@@ -1,3 +1,10 @@
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+models = os.getenv('MODELS')
+
 MODELS = ['prompthero/openjourney',
           'runwayml/stable-diffusion-v1-5',
           'CompVis/stable-diffusion-v1-4',
@@ -16,4 +23,9 @@ MODELS = ['prompthero/openjourney',
           'Yntec/photoMovieRealistic',
           'Yntec/edgeOfRealism',
           'segmind/SSD-1B',
+          'digiplay/Juggernaut_final'
           ]
+
+if models:
+    models_list = models.split(',')
+    MODELS.extend(models_list)
