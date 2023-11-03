@@ -272,10 +272,16 @@ async def generate_image(update, prompt, steps, seed, count):
     else:
         torch.manual_seed(seed)
     pipe = pipe.to("cuda")
+
     async def custom_callback(step, timestep, latents):
-        text = f'{step} {timestep} {latents}'
-        txt = await update.reply_text(text, disable_web_page_preview=True, quote=True,)
-    images = pipe(prompt, num_inference_steps=steps,num_images_per_prompt=count,callback=custom_callback,callback_steps=5).images
+        text = f'Step: {step}, Timestep: {timestep}, Latents: {latents}'
+        await update.reply_text(text, disable_web_page_preview=True, quote=True,)
+
+    images = pipe(prompt, 
+                  num_inference_steps=steps, 
+                  num_images_per_prompt=count,
+                  callback=custom_callback, 
+                  callback_steps=5).images
     image_streams=[]
     for image in images:
         image_stream = io.BytesIO()
