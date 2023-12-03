@@ -42,7 +42,6 @@ DEFAULT_SETTINGS = {
     "steps": 100,
     "seed": -1,
     "image_count": 1,
-    "negative_prompt": "NSFW,Ugly,Noise,Blur,incomplete",
 }
 
 app = Client("text2image", bot_token=bot_token, api_id=int(api_id), api_hash=api_hash)
@@ -140,7 +139,6 @@ async def generate(bot, update: Message):
                     settings.get("steps"),
                     settings.get("seed"),
                     settings.get("image_count"),
-                    # settings.get("negative_prompt"),
                 )
                 await text.edit(f'Uploading {settings.get("image_count")} Image ....')
                 for image in images:
@@ -197,18 +195,11 @@ async def generate_image(update, prompt, steps, seed, count):
     pipe = pipe.to("cuda")
 
     # def custom_callback(step, timestep, latents):
-    #     text = f"Step: {step}, Timestep: {timestep}, Latents: {latents}"
-    #     print("🤖", text)
-    # await update.reply_text(text, disable_web_page_preview=True, quote=True,)
+    #     text = f'Step: {step}, Timestep: {timestep}, Latents: {latents}'
+    #     print("🤖",  text)
+    #     # await update.reply_text(text, disable_web_page_preview=True, quote=True,)
 
-    images = pipe(
-        prompt,
-        num_inference_steps=steps,
-        num_images_per_prompt=count,
-        # negative_prompt=negative_prompt
-        #   callback=custom_callback,
-        #   callback_steps=5
-    ).images
+    images = pipe(prompt, num_inference_steps=steps, num_images_per_prompt=count).images
     image_streams = []
     for image in images:
         image_stream = io.BytesIO()
@@ -226,7 +217,6 @@ async def settings(bot, update: Message):
         with open(settings_file_path, "w") as f:
             json.dump(DEFAULT_SETTINGS, f, indent=4)
             text = "Settings file created. Please use the command again to access the settings."
-            await update.reply_text(text=text, reply_markup=SETTINGS, quote=True)
     else:
         with open(settings_file_path, "r") as f:
             settings = json.load(f)
