@@ -47,6 +47,8 @@ DEFAULT_SETTINGS = {
 
 app = Client("text2image", bot_token=bot_token, api_id=int(api_id), api_hash=api_hash)
 
+pipe = None
+
 
 @app.on_callback_query()
 async def cb_data(bot, update):
@@ -186,6 +188,7 @@ async def load_model(model, update):
 
 
 async def generate_image(update, prompt, steps, seed, count, negative_prompt):
+    global pipe
     steps = steps
     if seed == -1:
         torch.manual_seed(torch.seed())
