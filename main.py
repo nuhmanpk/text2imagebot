@@ -140,7 +140,7 @@ async def generate(bot, update: Message):
                     settings.get("steps"),
                     settings.get("seed"),
                     settings.get("image_count"),
-                    settings.get("negative_prompt"),
+                    # settings.get("negative_prompt"),
                 )
                 await text.edit(f'Uploading {settings.get("image_count")} Image ....')
                 for image in images:
@@ -187,7 +187,7 @@ async def load_model(model, update):
         return False
 
 
-async def generate_image(update, prompt, steps, seed, count, negative_prompt):
+async def generate_image(update, prompt, steps, seed, count):
     global pipe
     steps = steps
     if seed == -1:
@@ -205,7 +205,7 @@ async def generate_image(update, prompt, steps, seed, count, negative_prompt):
         prompt,
         num_inference_steps=steps,
         num_images_per_prompt=count,
-        negative_prompt=negative_prompt
+        # negative_prompt=negative_prompt
         #   callback=custom_callback,
         #   callback_steps=5
     ).images
