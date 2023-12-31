@@ -199,7 +199,7 @@ async def generate_image(update, prompt, steps, seed, count):
     #     print("🤖",  text)
     #     # await update.reply_text(text, disable_web_page_preview=True, quote=True,)
 
-    images = pipe(prompt, num_inference_steps=steps, num_images_per_prompt=count).images
+    images = pipe(prompt, num_inference_steps=steps, num_images_per_prompt=count,negative_prompt='NSFW').images
     image_streams = []
     for image in images:
         image_stream = io.BytesIO()
