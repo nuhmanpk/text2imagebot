@@ -53,7 +53,7 @@ To run the code locally, follow the instructions below:
   - [ ] Add Upscaler
   - [x] More user friendly UI
   - [ ] Add showcase channel
-  - [ ] Add Multi image generation from same prompt
+  - [x] Add Multi image generation from same prompt
   - [ ]  Add negative prompt section 
 
 Feel free to contribute to the project by submitting bug reports, feature requests, or pull requests. Your contributions are highly appreciated!
